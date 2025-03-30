@@ -27,7 +27,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.animateDp
-import androidx.compose.animation.core.animateInt
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -72,6 +71,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sadellie.unitto.core.common.R
 import com.sadellie.unitto.core.designsystem.icons.symbols.Add
 import com.sadellie.unitto.core.designsystem.icons.symbols.Symbols
+import com.sadellie.unitto.core.designsystem.shapes.Sizes
 import com.sadellie.unitto.core.model.timezone.FavoriteZone
 import com.sadellie.unitto.core.ui.DrawerButton
 import com.sadellie.unitto.core.ui.EmptyScreen
@@ -178,7 +178,7 @@ private fun TimeZoneScreen(
       contentPadding = PaddingValues(start = 8.dp, end = 8.dp, bottom = 124.dp),
       verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-      item("user time") {
+      item(key = "user time", contentType = ContentType.USER_TIME) {
         UserTimeZone(
           modifier = Modifier.fillMaxWidth().padding(8.dp),
           userTime = currentUserTime,
@@ -188,7 +188,11 @@ private fun TimeZoneScreen(
         )
       }
 
-      items(mutableFavorites, { it.timeZone.id }) { item ->
+      items(
+        items = mutableFavorites,
+        key = { it.timeZone.id },
+        contentType = { ContentType.ITEM },
+      ) { item ->
         ReorderableItem(reorderableLazyListState, item.timeZone.id) { isDragging ->
           val isSelected = uiState.selectedTimeZone == item
           val transition = updateTransition(isDragging, label = "draggedTransition")
@@ -198,7 +202,10 @@ private fun TimeZoneScreen(
               if (it) MaterialTheme.colorScheme.surfaceContainerHighest
               else MaterialTheme.colorScheme.surfaceContainer
             }
-          val cornerRadius by transition.animateInt(label = "cornerRadius") { if (it) 25 else 15 }
+          val cornerRadius by
+            transition.animateDp(label = "cornerRadius") {
+              if (it) Sizes.extraLarge else Sizes.medium
+            }
 
           FavoriteTimeZoneItem(
             modifier =
@@ -313,6 +320,11 @@ private fun TimeZoneDialog(
 
     TimeZoneDialogState.Nothing -> Unit
   }
+}
+
+private enum class ContentType {
+  USER_TIME,
+  ITEM,
 }
 
 private const val USER_TIME_UPDATE_FREQUENCY_MS = 5_000L

@@ -86,6 +86,8 @@ constructor(
           additionalButtons = prefs.additionalButtons,
           inverseMode = prefs.inverseMode,
           partialHistoryView = prefs.partialHistoryView,
+          initialPartialHistoryView = prefs.initialPartialHistoryView,
+          openHistoryViewButton = prefs.openHistoryViewButton,
         )
       }
       .stateIn(viewModelScope, CalculatorUIState.Loading)
@@ -149,6 +151,9 @@ constructor(
   fun updateInverseMode(newValue: Boolean) =
     viewModelScope.launch { userPrefsRepository.updateInverseMode(newValue) }
 
+  fun updateInitialPartialHistoryView(newValue: Boolean) =
+    viewModelScope.launch { userPrefsRepository.updateInitialPartialHistoryView(newValue) }
+
   fun clearHistory() = viewModelScope.launch { calculatorHistoryRepository.clear() }
 
   fun deleteHistoryItem(item: CalculatorHistoryItem) =
@@ -163,7 +168,7 @@ constructor(
 
       val calculated =
         try {
-            calculate(inputValue, prefs.radianMode, RoundingMode.HALF_EVEN)
+            calculate(inputValue, prefs.radianMode, RoundingMode.HALF_EVEN, prefs.precision)
               .toFormattedString(prefs.precision, prefs.outputFormat)
           } catch (e: ExpressionException.DivideByZero) {
             _result.update { CalculationResult.DivideByZeroError }
@@ -179,7 +184,8 @@ constructor(
         if (prefs.fractionalOutput) {
           try {
             // Different rounding mode to properly calculate fractional
-            calculate(inputValue, prefs.radianMode, RoundingMode.DOWN).toFractionalString()
+            calculate(inputValue, prefs.radianMode, RoundingMode.DOWN, prefs.precision)
+              .toFractionalString()
           } catch (e: Exception) {
             _result.update { CalculationResult.Error }
             return@launch
@@ -213,6 +219,7 @@ constructor(
                 input = _input.text.toString(),
                 radianMode = prefs.radianMode,
                 roundingMode = RoundingMode.HALF_EVEN,
+                scale = prefs.precision,
               )
             CalculationResult.Success(
               calculated.toFormattedString(prefs.precision, prefs.outputFormat)
@@ -228,9 +235,10 @@ constructor(
     input: String,
     radianMode: Boolean,
     roundingMode: RoundingMode = RoundingMode.HALF_EVEN,
+    scale: Int,
   ): BigDecimal =
     withContext(Dispatchers.Default) {
-      Expression(input, radianMode, roundingMode).calculate().also {
+      Expression(input, scale, radianMode, roundingMode).calculate().also {
         if (it.isGreaterThan(maxCalculationResult)) throw ExpressionException.TooBig()
       }
     }

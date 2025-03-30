@@ -60,10 +60,6 @@ internal fun Preferences.getEnableToolsExperiment(): Boolean {
   return this[PrefsKeys.ENABLE_TOOLS_EXPERIMENT] ?: false
 }
 
-internal fun Preferences.getSystemFont(): Boolean {
-  return this[PrefsKeys.SYSTEM_FONT] ?: false
-}
-
 internal fun Preferences.getLastReadChangelog(): String {
   return this[PrefsKeys.LAST_READ_CHANGELOG] ?: ""
 }
@@ -93,6 +89,14 @@ internal fun Preferences.getMiddleZero(): Boolean {
 
 internal fun Preferences.getPartialHistoryView(): Boolean {
   return this[PrefsKeys.PARTIAL_HISTORY_VIEW] ?: true
+}
+
+internal fun Preferences.getInitialPartialHistoryView(): Boolean {
+  return this[PrefsKeys.INITIAL_PARTIAL_HISTORY_VIEW] ?: false
+}
+
+internal fun Preferences.getOpenHistoryViewButton(): Boolean {
+  return this[PrefsKeys.OPEN_HISTORY_VIEW_BUTTON] ?: false
 }
 
 internal fun Preferences.getDigitsPrecision(): Int {

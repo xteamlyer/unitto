@@ -22,7 +22,6 @@ import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
@@ -30,6 +29,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
+import androidx.core.net.toUri
 import com.sadellie.unitto.core.common.showToast
 import com.sadellie.unitto.core.designsystem.icons.symbols.AccessibilityNew
 import com.sadellie.unitto.core.designsystem.icons.symbols.Calculate
@@ -45,47 +45,6 @@ import com.sadellie.unitto.core.designsystem.icons.symbols.SwapHoriz
 import com.sadellie.unitto.core.designsystem.icons.symbols.Symbols
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.Serializable
-
-interface Route {
-  /** Don't touch, users have "..._route" in their settings */
-  val id: String
-}
-
-@Serializable
-data object CalculatorGraphRoute : Route {
-  override val id = "calculator_route"
-}
-
-@Serializable
-data object ConverterGraphRoute : Route {
-  override val id = "converter_route"
-}
-
-@Serializable
-data object GraphingGraphRoute : Route {
-  override val id = "graphing_route"
-}
-
-@Serializable
-data object DateCalculatorGraphRoute : Route {
-  override val id = "date_calculator_route"
-}
-
-@Serializable
-data object TimeZoneGraphRoute : Route {
-  override val id = "time_zone_route"
-}
-
-@Serializable
-data object BodyMassGraphRoute : Route {
-  override val id = "body_mass_route"
-}
-
-@Serializable
-data object SettingsGraphRoute : Route {
-  override val id = "settings_route"
-}
 
 sealed interface DrawerItem {
   val graphRoute: Route
@@ -217,17 +176,11 @@ val mainDrawerItems: List<DrawerItem> = run {
 
 val additionalDrawerItems: List<DrawerItem> = listOf(SettingsDrawerItem)
 
-val graphRoutes = (mainDrawerItems + additionalDrawerItems).map { it.graphRoute }
-
-fun deepLink(graphRoute: Route): String = "$NAVIGATION_BASE_URI/${graphRoute.id}"
-
-private const val NAVIGATION_BASE_URI = "app://com.sadellie.unitto"
-
 private fun Context.shortcutInfoCompat(graphRoute: Route, shortcut: Shortcut): ShortcutInfoCompat {
   return ShortcutInfoCompat.Builder(this, graphRoute.id)
     .setShortLabel(getString(shortcut.shortcutShortLabel))
     .setLongLabel(getString(shortcut.shortcutLongLabel))
     .setIcon(IconCompat.createWithResource(this, shortcut.shortcutDrawable))
-    .setIntent(Intent(Intent.ACTION_VIEW, Uri.parse(deepLink(graphRoute)), this, this.javaClass))
+    .setIntent(Intent(Intent.ACTION_VIEW, deepLink(graphRoute).toUri(), this, this.javaClass))
     .build()
 }

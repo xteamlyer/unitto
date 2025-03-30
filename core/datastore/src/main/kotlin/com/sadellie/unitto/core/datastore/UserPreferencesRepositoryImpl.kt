@@ -48,7 +48,6 @@ constructor(private val dataStore: DataStore<Preferences>) : UserPreferencesRepo
         monetMode = preferences.getMonetMode(),
         startingScreen = preferences.getStartingScreen(),
         enableToolsExperiment = preferences.getEnableToolsExperiment(),
-        systemFont = preferences.getSystemFont(),
         enableVibrations = preferences.getEnableVibrations(),
       )
     }
@@ -68,6 +67,8 @@ constructor(private val dataStore: DataStore<Preferences>) : UserPreferencesRepo
         formatterSymbols = preferences.getFormatterSymbols(),
         middleZero = preferences.getMiddleZero(),
         partialHistoryView = preferences.getPartialHistoryView(),
+        initialPartialHistoryView = preferences.getInitialPartialHistoryView(),
+        openHistoryViewButton = preferences.getOpenHistoryViewButton(),
         precision = preferences.getDigitsPrecision(),
         outputFormat = preferences.getOutputFormat(),
         acButton = preferences.getAcButton(),
@@ -98,7 +99,6 @@ constructor(private val dataStore: DataStore<Preferences>) : UserPreferencesRepo
   override val displayPrefs: Flow<DisplayPreferences> =
     data.map { preferences ->
       DisplayPreferences(
-        systemFont = preferences.getSystemFont(),
         middleZero = preferences.getMiddleZero(),
         acButton = preferences.getAcButton(),
       )
@@ -239,12 +239,16 @@ constructor(private val dataStore: DataStore<Preferences>) : UserPreferencesRepo
     dataStore.edit { preferences -> preferences[PrefsKeys.UNIT_CONVERTER_SORTING] = sorting.name }
   }
 
-  override suspend fun updateSystemFont(enabled: Boolean) {
-    dataStore.edit { preferences -> preferences[PrefsKeys.SYSTEM_FONT] = enabled }
-  }
-
   override suspend fun updatePartialHistoryView(enabled: Boolean) {
     dataStore.edit { preferences -> preferences[PrefsKeys.PARTIAL_HISTORY_VIEW] = enabled }
+  }
+
+  override suspend fun updateInitialPartialHistoryView(enabled: Boolean) {
+    dataStore.edit { preferences -> preferences[PrefsKeys.INITIAL_PARTIAL_HISTORY_VIEW] = enabled }
+  }
+
+  override suspend fun updateOpenHistoryViewButton(enabled: Boolean) {
+    dataStore.edit { preferences -> preferences[PrefsKeys.OPEN_HISTORY_VIEW_BUTTON] = enabled }
   }
 
   override suspend fun updateFractionalOutput(enabled: Boolean) {

@@ -29,11 +29,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import com.sadellie.unitto.core.common.FormatterSymbols
-import com.sadellie.unitto.core.designsystem.theme.LocalNumberTypography
+import com.sadellie.unitto.core.designsystem.theme.NumberTypographyUnitto
 
 @Composable
 fun FixedExpressionInputTextField(
@@ -46,12 +46,12 @@ fun FixedExpressionInputTextField(
   val clipboardManager =
     ExpressionClipboardManager(
       formatterSymbols = formatterSymbols,
-      clipboardManager =
+      nativeClipboard =
         LocalContext.current.getSystemService(Context.CLIPBOARD_SERVICE)
           as android.content.ClipboardManager,
     )
 
-  CompositionLocalProvider(LocalClipboardManager provides clipboardManager) {
+  CompositionLocalProvider(LocalClipboard provides clipboardManager) {
     SelectionContainer(
       modifier =
         Modifier.horizontalScroll(rememberScrollState()) // Must be first
@@ -62,10 +62,7 @@ fun FixedExpressionInputTextField(
         modifier = Modifier.fillMaxWidth(),
         text = value.formatExpression(formatterSymbols),
         style =
-          LocalNumberTypography.current.displaySmall.copy(
-            color = textColor,
-            textAlign = TextAlign.End,
-          ),
+          NumberTypographyUnitto.displaySmall.copy(color = textColor, textAlign = TextAlign.End),
       )
     }
   }

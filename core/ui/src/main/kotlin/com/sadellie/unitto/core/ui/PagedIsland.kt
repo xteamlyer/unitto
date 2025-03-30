@@ -31,7 +31,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
@@ -43,6 +42,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sadellie.unitto.core.designsystem.shapes.Shapes
+import com.sadellie.unitto.core.designsystem.shapes.Sizes
 import kotlinx.coroutines.launch
 
 /**
@@ -74,7 +75,7 @@ fun PagedIsland(
     Column(
       modifier =
         modifier
-          .clip(RoundedCornerShape(32.dp))
+          .clip(Shapes.ExtraLarge)
           .clickable {
             onClick()
             val targetPage = pagerState.currentPage + 1
@@ -87,7 +88,7 @@ fun PagedIsland(
             }
           }
           .background(backgroundColor)
-          .padding(16.dp)
+          .padding(Sizes.large)
     ) {
       Row(
         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),

@@ -33,7 +33,6 @@ data class AppPreferences(
   val monetMode: MonetMode,
   val startingScreen: Route,
   val enableToolsExperiment: Boolean,
-  val systemFont: Boolean,
   val enableVibrations: Boolean,
 )
 
@@ -47,6 +46,8 @@ data class CalculatorPreferences(
   val additionalButtons: Boolean,
   val inverseMode: Boolean,
   val partialHistoryView: Boolean,
+  val initialPartialHistoryView: Boolean,
+  val openHistoryViewButton: Boolean,
   val fractionalOutput: Boolean,
   val precision: Int,
   val outputFormat: Int,
@@ -68,7 +69,6 @@ data class ConverterPreferences(
 )
 
 data class DisplayPreferences(
-  val systemFont: Boolean,
   val middleZero: Boolean,
   val acButton: Boolean,
 )

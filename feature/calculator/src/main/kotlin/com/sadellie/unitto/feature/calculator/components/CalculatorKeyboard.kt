@@ -20,9 +20,7 @@ package com.sadellie.unitto.feature.calculator.components
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -48,6 +46,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import com.sadellie.unitto.core.common.Token
 import com.sadellie.unitto.core.designsystem.LocalWindowSize
+import com.sadellie.unitto.core.designsystem.defaultIconAnimationSpec
 import com.sadellie.unitto.core.designsystem.icons.symbols.KeyboardArrowUp
 import com.sadellie.unitto.core.designsystem.icons.symbols.Symbols
 import com.sadellie.unitto.core.ui.ColumnWithConstraints
@@ -348,8 +347,8 @@ private fun ToggleExpandedAdditionalKeysButton(
 ) {
   val expandRotation: Float by
     animateFloatAsState(
-      targetValue = if (expanded) 180f else 0f,
-      animationSpec = tween(easing = FastOutSlowInEasing),
+      targetValue = if (expanded) 0f else 180f,
+      animationSpec = defaultIconAnimationSpec(),
       label = "Rotate on expand",
     )
   Box(modifier = modifier, contentAlignment = Alignment.Center) {

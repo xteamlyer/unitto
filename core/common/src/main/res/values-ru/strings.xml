@@ -143,7 +143,6 @@
     <string name="settings_period">Точка</string>
     <string name="settings_precision">Точность</string>
     <string name="settings_precision_max">%1$s (Максимум)</string>
-    <string name="settings_precision_support">Количество десятичных знаков</string>
     <string name="settings_privacy_policy">Политика конфиденциальности</string>
     <string name="settings_rate_this_app">Оценить приложение</string>
     <string name="settings_reorder_unit_group_description">Переместить группу величин</string>
@@ -157,13 +156,10 @@
     <string name="settings_space">Пробел</string>
     <string name="settings_starting_screen">Начальный экран</string>
     <string name="settings_system">Системный</string>
-    <string name="settings_system_font">Системный шрифт</string>
-    <string name="settings_system_font_support">Использовать системный шрифт для текстов в приложении</string>
     <string name="settings_terms_and_conditions">Условия и положения</string>
     <string name="settings_third_party_licenses">Лицензии третьих лиц</string>
     <string name="settings_title">Настройки</string>
     <string name="settings_translate_app">Перевести приложение</string>
-    <string name="settings_translate_app_support">Помогите с переводом на POEditor</string>
     <string name="settings_unit_groups_support">Отключите или отсортируйте единицы измерений</string>
     <string name="settings_unit_groups_title">Группы величин</string>
     <string name="settings_units_sorting">Сортировка списка единиц измерений</string>

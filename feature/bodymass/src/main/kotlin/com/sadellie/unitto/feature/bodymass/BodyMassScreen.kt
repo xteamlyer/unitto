@@ -27,12 +27,10 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ElevatedButton
@@ -60,6 +58,9 @@ import com.sadellie.unitto.core.ui.EmptyScreen
 import com.sadellie.unitto.core.ui.ScaffoldWithTopBar
 import com.sadellie.unitto.core.ui.SegmentedButton
 import com.sadellie.unitto.core.ui.SegmentedButtonsRow
+import com.sadellie.unitto.core.ui.TextFieldBox
+import com.sadellie.unitto.core.ui.TextFieldBoxDefaults
+import com.sadellie.unitto.core.ui.TextFieldRow
 import com.sadellie.unitto.feature.bodymass.components.BodyMassResult
 import com.sadellie.unitto.feature.bodymass.components.BodyMassTextField
 import java.math.BigDecimal
@@ -137,24 +138,25 @@ private fun BodyMassScreen(
 
 @Composable
 private fun BodyMassInputBox(uiState: UIState.Ready, weightShortLabel: String) {
-  Column(
+  TextFieldBox(
     modifier =
-      Modifier.fillMaxWidth()
-        .background(MaterialTheme.colorScheme.secondaryContainer, RoundedCornerShape(32.dp))
-        .padding(16.dp, 24.dp),
-    verticalArrangement = Arrangement.spacedBy(8.dp),
+      Modifier.background(MaterialTheme.colorScheme.secondaryContainer)
+        .padding(TextFieldBoxDefaults.Padding)
+        .fillMaxWidth()
   ) {
     Crossfade(targetState = uiState.isMetric, label = "Measurement system change") { isMetric ->
       if (isMetric) {
-        BodyMassTextField(
-          modifier = Modifier.fillMaxWidth(),
-          state = uiState.height1,
-          label =
-            "${stringResource(R.string.body_mass_height)}, ${stringResource(R.string.unit_centimeter_short)}",
-          formatterSymbols = uiState.formatterSymbols,
-        )
+        TextFieldRow {
+          BodyMassTextField(
+            modifier = Modifier.fillMaxWidth(),
+            state = uiState.height1,
+            label =
+              "${stringResource(R.string.body_mass_height)}, ${stringResource(R.string.unit_centimeter_short)}",
+            formatterSymbols = uiState.formatterSymbols,
+          )
+        }
       } else {
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        TextFieldRow {
           BodyMassTextField(
             modifier = Modifier.weight(1f),
             state = uiState.height1,
@@ -172,13 +174,16 @@ private fun BodyMassInputBox(uiState: UIState.Ready, weightShortLabel: String) {
         }
       }
     }
-    BodyMassTextField(
-      modifier = Modifier.fillMaxWidth(),
-      state = uiState.weight,
-      label = "${stringResource(R.string.body_mass_weight)}, $weightShortLabel",
-      formatterSymbols = uiState.formatterSymbols,
-      imeAction = ImeAction.Done,
-    )
+
+    TextFieldRow {
+      BodyMassTextField(
+        modifier = Modifier.fillMaxWidth(),
+        state = uiState.weight,
+        label = "${stringResource(R.string.body_mass_weight)}, $weightShortLabel",
+        formatterSymbols = uiState.formatterSymbols,
+        imeAction = ImeAction.Done,
+      )
+    }
   }
 }
 

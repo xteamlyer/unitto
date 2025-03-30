@@ -29,13 +29,12 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 
 fun TextFieldState.addTokens(tokens: String) {
-  val tokenAhead by lazy { text.toString().tokenAhead(selection.start) }
-
   when (tokens) {
     Token.Operator.PLUS,
     Token.Operator.MULTIPLY,
     Token.Operator.DIVIDE,
     Token.Operator.POWER -> {
+      val tokenAhead = text.toString().tokenAhead(selection.start)
       if (tokenAhead == Token.Operator.PLUS) return deleteAheadAndAdd(tokens)
       if (tokenAhead == Token.Operator.MINUS) return deleteAheadAndAdd(tokens)
       if (tokenAhead == Token.Operator.MULTIPLY) return deleteAheadAndAdd(tokens)
@@ -45,10 +44,12 @@ fun TextFieldState.addTokens(tokens: String) {
       if (tokenAhead == "") return deleteTokens()
     }
     Token.Operator.MINUS -> {
+      val tokenAhead = text.toString().tokenAhead(selection.start)
       if (tokenAhead == Token.Operator.PLUS) return deleteAheadAndAdd(tokens)
       if (tokenAhead == Token.Operator.MINUS) return deleteAheadAndAdd(tokens)
     }
     Token.Digit.DOT -> {
+      val tokenAhead = text.toString().tokenAhead(selection.start)
       if (tokenAhead == Token.Digit.DOT) return deleteAheadAndAdd(tokens)
     }
   }
@@ -157,4 +158,4 @@ private fun TextFieldState.deleteAheadAndAdd(tokens: String) {
   this.addTokens(tokens)
 }
 
-private const val TEXT_FIELD_STATE_DEBOUNCE_MS = 100L
+private const val TEXT_FIELD_STATE_DEBOUNCE_MS = 50L

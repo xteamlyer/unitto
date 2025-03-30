@@ -31,13 +31,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.FloatingActionButton
@@ -70,10 +68,15 @@ import com.sadellie.unitto.core.designsystem.icons.symbols.Add
 import com.sadellie.unitto.core.designsystem.icons.symbols.Event
 import com.sadellie.unitto.core.designsystem.icons.symbols.Remove
 import com.sadellie.unitto.core.designsystem.icons.symbols.Symbols
+import com.sadellie.unitto.core.designsystem.shapes.Shapes
+import com.sadellie.unitto.core.designsystem.shapes.Sizes
 import com.sadellie.unitto.core.ui.EmptyScreen
+import com.sadellie.unitto.core.ui.TextFieldBox
+import com.sadellie.unitto.core.ui.TextFieldBoxDefaults
+import com.sadellie.unitto.core.ui.TextFieldRow
 import com.sadellie.unitto.feature.datecalculator.ZonedDateTimeUtils
-import com.sadellie.unitto.feature.datecalculator.components.DateTimeDialogs
 import com.sadellie.unitto.feature.datecalculator.components.DateTimeBlock
+import com.sadellie.unitto.feature.datecalculator.components.DateTimeDialogs
 import com.sadellie.unitto.feature.datecalculator.components.DialogState
 import com.sadellie.unitto.feature.datecalculator.components.TimeUnitTextField
 import java.time.ZonedDateTime
@@ -120,14 +123,14 @@ private fun AddSubtractView(
         modifier =
           Modifier.padding(paddingValues)
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 16.dp, vertical = 16.dp),
+            .padding(Sizes.large),
         verticalArrangement = Arrangement.spacedBy(12.dp),
       ) {
         AnimatedContent(
           targetState = showResult,
           label = "Reveal result",
           transitionSpec = { fadeIn() togetherWith fadeOut() using SizeTransform() },
-          modifier = Modifier.clip(RoundedCornerShape(32.dp)),
+          modifier = Modifier.clip(Shapes.ExtraLarge),
         ) { show ->
           FlowRow(
             modifier = Modifier.fillMaxWidth(),
@@ -212,22 +215,23 @@ private fun InputTextFieldsBox(
   hours: TextFieldState,
   minutes: TextFieldState,
 ) {
-  Column(
+  TextFieldBox(
     modifier =
-      Modifier.fillMaxWidth()
-        .background(MaterialTheme.colorScheme.secondaryContainer, RoundedCornerShape(32.dp))
-        .padding(16.dp, 24.dp),
-    verticalArrangement = Arrangement.spacedBy(4.dp),
+      Modifier.background(MaterialTheme.colorScheme.secondaryContainer)
+        .padding(TextFieldBoxDefaults.Padding)
+        .fillMaxWidth()
   ) {
-    TimeUnitTextField(
-      modifier = Modifier.fillMaxWidth(),
-      state = years,
-      label = stringResource(R.string.date_calculator_years),
-      maxValue = 9_999.0,
-      formatterSymbols = formatterSymbols,
-    )
+    TextFieldRow {
+      TimeUnitTextField(
+        modifier = Modifier.fillMaxWidth(),
+        state = years,
+        label = stringResource(R.string.date_calculator_years),
+        maxValue = 9_999.0,
+        formatterSymbols = formatterSymbols,
+      )
+    }
 
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    TextFieldRow {
       TimeUnitTextField(
         modifier = Modifier.weight(1f),
         state = months,
@@ -245,7 +249,7 @@ private fun InputTextFieldsBox(
       )
     }
 
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    TextFieldRow {
       TimeUnitTextField(
         modifier = Modifier.weight(1f),
         state = hours,

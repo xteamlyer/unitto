@@ -20,6 +20,6 @@ package com.sadellie.unitto.feature.calculator
 
 internal enum class DragState {
   CLOSED,
-  SMALL,
+  PARTIAL,
   OPEN,
 }

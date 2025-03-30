@@ -39,6 +39,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -51,7 +52,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.InterceptPlatformTextInput
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalTextToolbar
 import androidx.compose.ui.text.AnnotatedString
@@ -65,7 +66,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.sadellie.unitto.core.common.FormatterSymbols
 import com.sadellie.unitto.core.common.Token
-import com.sadellie.unitto.core.designsystem.theme.LocalNumberTypography
+import com.sadellie.unitto.core.designsystem.theme.NumberTypographyUnitto
 import com.sadellie.unitto.core.ui.autosize.AutoSizeTextStyleBox
 import kotlinx.coroutines.awaitCancellation
 
@@ -88,7 +89,7 @@ fun ExpressionTextField(
       )
     }
 
-  CompositionLocalProvider(LocalClipboardManager provides clipboardManager) {
+  CompositionLocalProvider(LocalClipboard provides clipboardManager) {
     val displayedText =
       remember(state.text) {
         AnnotatedString(state.text.toString().formatExpression(formatterSymbols))
@@ -99,7 +100,7 @@ fun ExpressionTextField(
       modifier = modifier,
       readOnly = readOnly,
       inputTransformation = ExpressionInputTransformation(formatterSymbols),
-      textStyle = LocalNumberTypography.current.displayLarge.copy(textColor),
+      textStyle = NumberTypographyUnitto.displayLarge.copy(textColor),
       lineLimits = TextFieldLineLimits.SingleLine,
       cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurfaceVariant),
       outputTransformation = ExpressionOutputTransformation(formatterSymbols),
@@ -125,7 +126,7 @@ fun NumberBaseTextField(
     readOnly = readOnly,
     inputTransformation = NumberBaseInputTransformation,
     outputTransformation = NumberBaseOutputTransformation,
-    textStyle = LocalNumberTypography.current.displayLarge.copy(textColor),
+    textStyle = NumberTypographyUnitto.displayLarge.copy(textColor),
     lineLimits = TextFieldLineLimits.SingleLine,
     cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurfaceVariant),
     minRatio = minRatio,
@@ -146,7 +147,7 @@ fun SimpleTextField(
     state = state,
     modifier = modifier,
     readOnly = readOnly,
-    textStyle = LocalNumberTypography.current.displayLarge.copy(textColor),
+    textStyle = NumberTypographyUnitto.displayLarge.copy(textColor),
     lineLimits = TextFieldLineLimits.SingleLine,
     cursorBrush = SolidColor(MaterialTheme.colorScheme.onSurfaceVariant),
     minRatio = minRatio,
@@ -205,6 +206,12 @@ private fun AutoSizeTextField(
       val currentTextToolbar = LocalTextToolbar.current
       val style = LocalTextStyle.current
       val focusRequester = remember { FocusRequester() }
+
+      // Request focus so text field can scroll on user input
+      LaunchedEffect(state.text, readOnly, enabled) {
+        if (enabled && readOnly) return@LaunchedEffect
+        focusRequester.requestFocus()
+      }
 
       BasicTextField(
         state = state,
